@@ -1,0 +1,32 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_web:
+    name: Deploy Flutter Web to GitHub Pages
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Github 레포지토리 세팅
+        uses: actions/checkout@v4
+      - name: Flutter 세팅
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: 캐시된 빌드, Pub 초기화
+        run: flutter clean
+      - name: Pub 새로 가져오기
+        run: flutter pub get
+      - name: 플러터 웹 빌드
+        run: flutter build web --base-href "/blog/"
+      - name: Github Pages 배포
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: web
+          publish_dir: ./build/web

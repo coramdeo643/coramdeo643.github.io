@@ -7,7 +7,10 @@ class AppTheme {
         appBarTheme: AppBarTheme(
             backgroundColor: Colors.black, foregroundColor: Colors.white),
         colorScheme: ColorScheme.dark(),
-        textTheme: GoogleFonts.poppinsTextTheme(TextTheme()));
+        textTheme: GoogleFonts.poppinsTextTheme(TextTheme(
+          bodyMedium: TextStyle(color: Colors.white),
+          displayMedium: TextStyle(color: Colors.white),
+        )));
   }
 
   static ThemeData get lightTheme {

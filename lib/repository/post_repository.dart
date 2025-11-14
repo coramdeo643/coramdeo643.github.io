@@ -20,5 +20,5 @@ class PostRepository {
     }
   }
 
-  Future<List<PostModel>> getPosts() async {}
+  // Future<List<PostModel>> getPosts() async {}
 }

@@ -1,18 +1,59 @@
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  const HomePage({super.key});
 
   @override
-  _HomePageState createState() => _HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Home")),
-      body: Text("Home Page"),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          title: _title(),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: _avatar(),
+            )
+          ],
+        ),
+        body: Container(
+          decoration: BoxDecoration(color: Colors.black),
+          padding: EdgeInsets.all(80),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _postList(),
+              _menu(),
+            ],
+          ),
+        ));
+  }
+
+  Widget _title() {
+    return Text("ProgrammerLife();");
+  }
+
+  Widget _avatar() {
+    return CircleAvatar(
+      backgroundImage: AssetImage("images/test.png"),
+      radius: 16,
+    );
+  }
+
+  Widget _postList() {
+    return Column(
+      children: [Text("All posts(10)")],
+    );
+  }
+
+  Widget _menu() {
+    return Column(
+      children: [Text("All menu(10)")],
     );
   }
 }

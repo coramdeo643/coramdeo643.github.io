@@ -59,8 +59,7 @@ class HomePage extends ConsumerWidget {
             final post = posts[i];
             return GestureDetector(
               onTap: () {
-                // context.go();
-
+                 context.go('/post/${post.id}');
               },
               child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
               child: Text(post.title),),

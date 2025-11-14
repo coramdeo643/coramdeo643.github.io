@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 
 class PostDetailPage extends StatelessWidget {
-  const PostDetailPage({super.key});
+  final String postId;
+  const PostDetailPage({super.key, required this.postId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
       body: Center(
-        child: Text("Post Detail Page"),
+        child: Text("Post ID: $postId"),
       ),
     );
   }

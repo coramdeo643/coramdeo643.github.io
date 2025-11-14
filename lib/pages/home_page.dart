@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:github_blog/providers/post_provider.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends ConsumerWidget {
   const HomePage({super.key});
@@ -37,7 +38,11 @@ class HomePage extends ConsumerWidget {
 
   Widget _avatar() {
     return CircleAvatar(
-      backgroundImage: AssetImage("images/test.png"),
+      // backgroundImage: AssetImage("images/test.png"),
+      backgroundImage: NetworkImage(
+          "https://picsum.photos/200?random=1"
+      ),
+
       radius: 16,
     );
   }
@@ -53,7 +58,10 @@ class HomePage extends ConsumerWidget {
               itemBuilder: (context, i) {
             final post = posts[i];
             return GestureDetector(
-              onTap: () {},
+              onTap: () {
+                // context.go();
+
+              },
               child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
               child: Text(post.title),),
             );

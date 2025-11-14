@@ -62,8 +62,8 @@ class HomePage extends ConsumerWidget {
                  context.go('/post/${post.id}');
               },
               child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text(post.title),),
-            );
+              child: Text(post.title, style: TextStyle(color: Colors.white),),
+            ));
           }))
         ],
       ),
@@ -87,7 +87,7 @@ class HomePage extends ConsumerWidget {
               ref.read(selectedMenuProvider.notifier).state = menu.id.toString();
             },
             child: Padding(padding: EdgeInsets.symmetric(vertical: 8),
-              child: Text(menu.name),
+              child: Text(menu.name, style: TextStyle(color: Colors.white),),
           ));
         }))
       ],

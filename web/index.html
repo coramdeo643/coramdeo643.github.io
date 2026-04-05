@@ -30,7 +30,13 @@
     html, body {
       height: 100%;
       overflow: hidden;
+      color-scheme: dark;
     }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #3a3a3a; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
 
     body {
       background: var(--bg);
@@ -62,6 +68,12 @@
       flex-shrink: 0;
     }
 
+    .welcome-panel.collapsed .panel-body {
+      max-height: 0 !important;
+      opacity: 0;
+      min-height: 0 !important;
+    }
+
     .panel-title-bar {
       display: flex;
       align-items: center;
@@ -70,6 +82,19 @@
       color: var(--dim);
       font-size: 12px;
       background: var(--panel-bg);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .panel-toggle {
+      color: var(--dim);
+      font-size: 10px;
+      margin-right: 8px;
+      transition: transform 0.2s;
+    }
+
+    .welcome-panel.collapsed .panel-title-bar {
+      border-bottom: none;
     }
 
     .panel-title-bar .title-text {
@@ -81,6 +106,10 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       min-height: 160px;
+      overflow: hidden;
+      max-height: 400px;
+      opacity: 1;
+      transition: max-height 0.35s ease, opacity 0.35s ease, min-height 0.35s ease;
     }
 
     .panel-left {
@@ -177,15 +206,29 @@
       min-height: 0;
     }
 
-    /* ── Eave (floats right of output) ── */
+    /* ── Bottom bar ── */
+    .bottom-bar {
+      flex-shrink: 0;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      gap: 12px;
+    }
+
+    .terminal-input-area {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Eave (right of input) ── */
     .eave-wrap {
       display: flex;
       flex-direction: column;
-      align-items: flex-end;
+      align-items: center;
       justify-content: flex-end;
       gap: 4px;
       flex-shrink: 0;
-      padding: 0 0 4px 12px;
+      padding-bottom: 4px;
     }
 
     .eave-bubble {
@@ -204,17 +247,7 @@
       font-size: 11px;
       line-height: 1.3;
       white-space: pre;
-      text-align: right;
-    }
-
-    /* ── Bottom bar (input only) ── */
-    .bottom-bar {
-      flex-shrink: 0;
-      position: relative;
-    }
-
-    .terminal-input-area {
-      width: 100%;
+      text-align: center;
     }
 
     /* ── Slash autocomplete dropdown ── */
@@ -386,8 +419,9 @@
 <div id="app">
 
   <!-- Welcome Panel -->
-  <div class="welcome-panel">
-    <div class="panel-title-bar">
+  <div class="welcome-panel" id="welcome-panel">
+    <div class="panel-title-bar" id="panel-title-bar">
+      <span class="panel-toggle" id="panel-toggle">▼</span>
       <span class="title-text">Claude Code v3.1.91</span>
     </div>
     <div class="panel-body">
@@ -426,15 +460,6 @@
 
     <div class="output-wrap">
       <div class="output-area" id="output"></div>
-      <!-- Eave -->
-      <div class="eave-wrap">
-        <div class="eave-bubble" id="eave-bubble">Try /help !</div>
-        <div class="eave-ascii"> .----. 
-( @  @ )
-(______)
-/\/\/\/\
-  buddy </div>
-      </div>
     </div>
 
     <div class="bottom-bar">
@@ -447,6 +472,15 @@
         </div>
         <hr class="terminal-separator">
         <div class="shortcut-hint"><span>?</span> for shortcuts &nbsp;·&nbsp; <span>↑↓</span> history &nbsp;·&nbsp; <span>Tab</span> autocomplete</div>
+      </div>
+      <!-- Eave -->
+      <div class="eave-wrap">
+        <div class="eave-bubble" id="eave-bubble">Try /help !</div>
+        <div class="eave-ascii"> .----. 
+( @  @ )
+(______)
+/\/\/\/\
+  buddy </div>
       </div>
     </div>
   </div>
@@ -484,7 +518,7 @@
         { type: 'separator' },
         { type: 'normal', text: '  Hi there! I\'m a Flutter Developer based in South Korea.' },
         { type: 'normal', text: '' },
-        { type: 'indent', text: 'Handle    coramdeo', color: 'green' },
+        { type: 'indent', text: 'Handle    dev.coramdeo', color: 'green' },
         { type: 'indent', text: 'Role      Flutter Developer', color: 'green' },
         { type: 'indent', text: 'Focus     Cross-platform mobile & web apps', color: 'green' },
         { type: 'indent', text: 'GitHub    github.com/coramdeo643', color: 'green' },
@@ -528,6 +562,7 @@
         { type: 'separator' },
         { type: 'indent', text: 'Email     dev.coramdeo@gmail.com', color: 'green' },
         { type: 'indent', text: 'GitHub    github.com/coramdeo643', color: 'green' },
+        { type: 'indent', text: 'Play      play.google.com/store/apps/dev?id=8422861508897099106', color: 'green' },
         { type: 'separator' },
         { type: 'dim', text: '  Feel free to reach out for collaboration or just to say hi!' },
       ],
@@ -554,10 +589,10 @@
         { type: 'separator' },
         { type: 'normal', text: '  안녕하세요! 한국에서 활동하는 Flutter 개발자입니다.' },
         { type: 'normal', text: '' },
-        { type: 'indent', text: '핸들      coramdeo', color: 'green' },
-        { type: 'indent', text: '직함      Flutter Developer', color: 'green' },
+        { type: 'indent', text: '닉네임    dev.coramdeo', color: 'green' },
+        { type: 'indent', text: '포지션    Flutter Developer', color: 'green' },
         { type: 'indent', text: '관심사    크로스플랫폼 모바일 & 웹 앱 개발', color: 'green' },
-        { type: 'indent', text: 'GitHub    github.com/coramdeo643', color: 'green' },
+        { type: 'indent', text: '깃허브    github.com/coramdeo643', color: 'green' },
         { type: 'indent', text: '이메일    dev.coramdeo@gmail.com', color: 'green' },
         { type: 'separator' },
         { type: 'dim', text: '  클린 아키텍처, 아름다운 UI, 개발자 도구에 열정을 가지고 있습니다.' },
@@ -597,7 +632,8 @@
         { type: 'section-header', text: '연락처' },
         { type: 'separator' },
         { type: 'indent', text: '이메일    dev.coramdeo@gmail.com', color: 'green' },
-        { type: 'indent', text: 'GitHub    github.com/coramdeo643', color: 'green' },
+        { type: 'indent', text: '깃허브    github.com/coramdeo643', color: 'green' },
+        { type: 'indent', text: '플레이    play.google.com/store/apps/dev?id=8422861508897099106', color: 'green' },
         { type: 'separator' },
         { type: 'dim', text: '  협업이나 인사 목적으로 언제든지 연락 주세요!' },
       ],
@@ -608,6 +644,29 @@
   const input  = document.getElementById('cmd-input');
   const eaveBubble = document.getElementById('eave-bubble');
   const dropdown = document.getElementById('slash-dropdown');
+
+  const welcomePanel = document.getElementById('welcome-panel');
+  const panelToggle  = document.getElementById('panel-toggle');
+  let panelCollapsed = false;
+  let panelCollapsedByCommand = false;
+
+  function collapsePanel() {
+    if (panelCollapsed) return;
+    panelCollapsed = true;
+    welcomePanel.classList.add('collapsed');
+    panelToggle.textContent = '▶';
+  }
+
+  function expandPanel() {
+    welcomePanel.classList.remove('collapsed');
+    panelToggle.textContent = '▼';
+    panelCollapsed = false;
+  }
+
+  document.getElementById('panel-title-bar').addEventListener('click', () => {
+    if (panelCollapsed) expandPanel();
+    else collapsePanel();
+  });
 
   const CMD_META = {
     en: [
@@ -697,6 +756,7 @@
     // linkify github/email
     let text = item.text;
     text = text.replace(/(github\.com\/[^\s,]+)/g, '<a href="https://$1" target="_blank">$1</a>');
+    text = text.replace(/(play\.google\.com\/[^\s,]+)/g, '<a href="https://$1" target="_blank">$1</a>');
     text = text.replace(/(dev\.coramdeo@gmail\.com)/g, '<a href="mailto:$1">$1</a>');
 
     div.innerHTML = text;
@@ -732,6 +792,11 @@
     const cmd = raw.trim().toLowerCase();
     if (!cmd) return;
 
+    if (!panelCollapsedByCommand) {
+      panelCollapsedByCommand = true;
+      collapsePanel();
+    }
+
     // history
     history.unshift(raw.trim());
     histIdx = -1;
@@ -751,12 +816,12 @@
     }
     if (cmd === '/about') {
       printLines(t.about);
-      showEave(lang === 'en' ? "That's me! 👋" : '저에요! 👋');
+      showEave(lang === 'en' ? "That's me!" : '저에요!');
       return;
     }
     if (cmd === '/skills') {
       printLines(t.skills);
-      showEave('Flutter 💙');
+      showEave('Flutter is love!');
       return;
     }
     if (cmd === '/projects') {
@@ -766,7 +831,7 @@
     }
     if (cmd === '/contact') {
       printLines(t.contact);
-      showEave(lang === 'en' ? 'Say hi! 📬' : '연락해보세요! 📬');
+      showEave(lang === 'en' ? 'Say hi!' : '연락해보세요!');
       return;
     }
     if (cmd === '/lang') {
@@ -776,7 +841,7 @@
       div.className = 'output-line green';
       div.textContent = msg;
       output.appendChild(div);
-      showEave(lang === 'en' ? 'Switched! 🌐' : '전환됨! 🌐');
+      showEave(lang === 'en' ? 'Switched!' : '전환됨!');
       return;
     }
 
@@ -787,7 +852,7 @@
       div.className = 'output-line dim';
       div.textContent = matched;
       output.appendChild(div);
-      showEave(lang === 'en' ? '🤔' : '🤔');
+      showEave(lang === 'en' ? '??' : '?');
       return;
     }
 
@@ -872,6 +937,7 @@
     }
 
     if (e.key === 'Enter') {
+      if (e.isComposing || e.keyCode === 229) return;
       e.preventDefault();
       const val = input.value;
       input.value = '';

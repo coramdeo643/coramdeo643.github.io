@@ -476,7 +476,7 @@
       <!-- Eave -->
       <div class="eave-wrap">
         <div class="eave-bubble" id="eave-bubble">Try /help !</div>
-        <div class="eave-ascii"> .----. 
+        <div class="eave-ascii" id="eave-ascii"> .----. 
 ( @  @ )
 (______)
 /\/\/\/\
@@ -906,8 +906,25 @@
     return null;
   }
 
+  const eaveAscii = document.getElementById('eave-ascii');
+  const LEGS_A = '/\\/\\/\\/\\';
+  const LEGS_B = '\\/\\/\\/\\/';
+  let legsToggle = false;
+  let legsTimer = null;
+
+  function wiggleLegs() {
+    legsToggle = !legsToggle;
+    eaveAscii.textContent = ` .----. \n( @  @ )\n(______)\n${legsToggle ? LEGS_B : LEGS_A}\n  buddy `;
+    clearTimeout(legsTimer);
+    legsTimer = setTimeout(() => {
+      eaveAscii.textContent = ` .----. \n( @  @ )\n(______)\n${LEGS_A}\n  buddy `;
+      legsToggle = false;
+    }, 300);
+  }
+
   // Input → update dropdown on every keystroke
   input.addEventListener('input', () => {
+    wiggleLegs();
     const val = input.value;
     if (val.startsWith('/')) {
       renderDropdown(val);
